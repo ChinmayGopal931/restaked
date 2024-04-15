@@ -3,8 +3,12 @@
     "version": "1.0.0",
     "scripts": {
       "start": "node backend/src/server.js",
-      "heroku-postbuild": "cd frontend && react-scripts build",
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "start-frontend": "cd frontend && react-scripts start",
+      "build-frontend": "cd frontend && react-scripts build",
+      "heroku-postbuild": "npm run build-frontend",
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "test-backend": "cd backend && echo \"Error: no test specified\" && exit 1",
+      "test-frontend": "cd frontend && react-scripts test"
     },
     "engines": {
       "node": "21.6.2"
