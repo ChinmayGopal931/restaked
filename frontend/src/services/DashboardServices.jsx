@@ -1,6 +1,6 @@
 export async function fetchOperators() {
     try {
-        const response = await fetch('http://localhost:8080/api/unique-operators');
+        const response = await fetch(`${backendURL}/api/unique-operators`);
         const data = await response.json();
         if (!response.ok) {
             throw new Error(data.message || 'Unable to fetch operators');
@@ -9,18 +9,18 @@ export async function fetchOperators() {
             return { 
                 name: op.name, 
                 operator: op.operator, 
-                totalShares: op.totalShares  // Assuming totalShares is now included
+                totalShares: op.totalShares  
             };
         });
     } catch (error) {
         console.error('Failed to fetch operators:', error);
-        throw error; // Rethrow the error to handle it in the calling component
+        throw error; 
     }
 }
 
 export async function fetchDataForOperator(selectedOperator) {
     try {
-        const url = `http://localhost:8080/api/operator-shares/${selectedOperator}`;
+        const url = `${backendURL}/api/operator-shares/${selectedOperator}`;
         console.log(`Fetching shares for operator ${selectedOperator}`);
         const response = await fetch(url);
         const newData = await response.json();
@@ -29,7 +29,7 @@ export async function fetchDataForOperator(selectedOperator) {
         }
         return {
             labels: newData.data.map(item => {
-                // Ensure timestamps are formatted as MM-DD-YYYY
+
                 const date = new Date(item.x * 1000);
                 return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
             }),
@@ -49,7 +49,7 @@ export async function fetchDataForOperator(selectedOperator) {
 
 export async function fetchTopOperators() {
     try {
-        const response = await fetch('http://localhost:8080/api/top-operators');
+        const response = await fetch(`${backendURL}/api/top-operators`);
         const data = await response.json();
         if (!response.ok) {
             throw new Error(data.message || 'Unable to fetch top operators');
