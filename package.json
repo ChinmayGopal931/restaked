@@ -2,10 +2,10 @@
     "name": "fullstack-app",
     "version": "1.0.0",
     "scripts": {
-        "start": "node backend/src/server.js",
-        "heroku-postbuild": "cd frontend && npm install && npm run build",
-        "test": "echo \"Error: no test specified\" && exit 1"
-      },      
+      "start": "node backend/src/server.js",
+      "heroku-postbuild": "cd frontend && react-scripts build",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
     "engines": {
       "node": "21.6.2"
     },
