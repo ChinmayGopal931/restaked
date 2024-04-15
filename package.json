@@ -3,14 +3,11 @@
     "version": "1.0.0",
     "scripts": {
       "start": "node backend/src/server.js",
-      "start:frontend": "cd frontend && react-scripts start",
-      "build:frontend": "cd frontend && npm install && npm run build",
+      "start:frontend": "react-scripts --prefix frontend start",
+      "build:frontend": "react-scripts --prefix frontend build",
       "heroku-postbuild": "npm run build:frontend",
-      "install:backend": "cd backend && npm install",
-      "install:frontend": "cd frontend && npm install",
-      "postinstall": "npm run install:backend && npm run install:frontend",
       "test": "echo \"Error: no test specified\" && exit 1",
-      "test:frontend": "cd frontend && react-scripts test"
+      "test:frontend": "react-scripts --prefix frontend test"
     },
     "engines": {
       "node": "21.6.2"
