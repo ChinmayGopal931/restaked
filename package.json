@@ -3,10 +3,11 @@
     "version": "1.0.0",
     "scripts": {
       "start": "node backend/src/server.js",
-      "build": "cd frontend && npm install && npm run build"
+      "build": "cd frontend && npm install && npm run build",
+      "postinstall": "npm run install-all",
+      "install-all": "cd backend && npm install && cd ../frontend && npm install"
     },
     "engines": {
       "node": "14.x"
     }
   }
-  
