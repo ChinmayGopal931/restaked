@@ -1,0 +1,73 @@
+/* Base setup for full height layout and reset margins/paddings */
+html, body, #root, .App, .app-container {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Flex display applied to containers for column layout */
+.App, .app-container, .home-container, .dashboard-container, .header-container, .cta-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  background-color: rgb(26, 29, 32);
+  color: aliceblue;
+}
+
+.navbar-container {
+  position: fixed;
+  top: 0;
+  width: 100%; /* Adjusted for full width */
+  min-height: 60px;
+  height: 8vh;
+  background: linear-gradient(to bottom, rgba(13, 15, 16, 1) 0%, rgba(13, 15, 16, 0.75) 100%);
+  z-index: 1000;
+}
+
+.hero-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 50vh;
+}
+
+.carousel-container, .chart-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 40vh;
+}
+
+.card-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px; /* Provides spacing around cards */
+}
+
+.footer-container, .row {
+  background: linear-gradient(to bottom, rgba(13, 15, 16, 1) 0%, rgba(13, 15, 16, 0.5) 100%);
+  padding: 20px;
+  text-align: center;
+}
+
+.footer-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 14px;
+}
+
+.row {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: auto; /* Centering row for modal-like appearance */
+}
+
