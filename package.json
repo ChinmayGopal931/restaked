@@ -3,12 +3,12 @@
     "version": "1.0.0",
     "scripts": {
       "start": "node backend/src/server.js",
-      "start-frontend": "cd frontend && react-scripts start",
-      "build-frontend": "cd frontend && react-scripts build",
+      "start-frontend": "react-scripts --cwd frontend start",
+      "build-frontend": "react-scripts --cwd frontend build",
       "heroku-postbuild": "npm run build-frontend",
       "test": "echo \"Error: no test specified\" && exit 1",
       "test-backend": "cd backend && echo \"Error: no test specified\" && exit 1",
-      "test-frontend": "cd frontend && react-scripts test"
+      "test-frontend": "react-scripts --cwd frontend test"
     },
     "engines": {
       "node": "21.6.2"
@@ -35,22 +35,12 @@
       "web3": "^4.7.0"
     },
     "eslintConfig": {
-      "extends": [
-        "react-app",
-        "react-app/jest"
-      ]
+      "extends": ["react-app", "react-app/jest"]
     },
     "browserslist": {
-      "production": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
-      ],
-      "development": [
-        "last 1 chrome version",
-        "last 1 firefox version",
-        "last 1 safari version"
-      ]
+      "production": [">0.2%", "not dead", "not op_mini all"],
+      "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
     }
   }
+  
   
