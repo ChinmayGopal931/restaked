@@ -1,3 +1,5 @@
+const backendUrl = process.env.BACKEND_URL
+
 export async function fetchOperators() {
     try {
         const response = await fetch(`${BACKEND_URL}/api/unique-operators`);
