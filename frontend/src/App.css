@@ -71,3 +71,42 @@ body {
   margin: auto; /* Centering row for modal-like appearance */
 }
 
+@media (max-width: 768px) {
+  body {
+    font-size: 16px; /* Increase base font size for better readability */
+  }
+
+  .navbar-container {
+    min-height: 50px; /* Adjust navbar for touch accessibility */
+    height: 10vh;
+    width: 100%; /* Ensure navbar covers full width */
+  }
+
+  .hero-container,
+  .carousel-container,
+  .dashboard-container,
+  .home-container {
+    flex-direction: column; /* Stack components vertically */
+  }
+
+  .card-container {
+    width: 90%; /* Adjust card width for better visibility */
+    margin: 10px auto; /* Center cards horizontally */
+    padding: 15px; /* Increase padding for touch targets */
+  }
+
+  .footer-container {
+    padding: 15px 0; /* Increase footer padding */
+    font-size: 14px; /* Enhance footer text size for readability */
+  }
+
+  .header-container,
+  .cta-container {
+    padding: 20px; /* Add more padding around content */
+  }
+
+  .chart-container {
+    margin: 10px; /* Reduce chart container margin */
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
+}
