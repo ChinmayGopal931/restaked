@@ -72,42 +72,43 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 500px;
-  margin: auto; /* Centering row for modal-like appearance */
+  margin: auto; 
 }
 
 @media (max-width: 768px) {
   body {
-    font-size: 16px; /* Increase base font size for better readability */
+    font-size: 16px; 
   }
 
   .navbar-container {
-    min-height: 50px; /* Adjust navbar for touch accessibility */
+    min-height: 50px;
     height: 30vh;
-    width: 100%; /* Ensure navbar covers full width */
+    width: 100%; 
   }
 
   .hero-container,
-  .carousel-container,
-  .dashboard-container,
   .home-container {
-    flex-direction: column; /* Stack components vertically */
+    flex-direction: column; 
   }
 
+  .dashboard-container {
+    margin-top: 40vh;
+  }
+
+  .carousel-container,
   .card-container {
-    width: 90%; /* Adjust card width for better visibility */
-    margin: 10px auto; /* Center cards horizontally */
-    padding: 15px; /* Increase padding for touch targets */
+    display: none;
   }
 
   .footer-container {
     position: relative;
-    padding: 15px 0; /* Increase footer padding */
-    font-size: 14px; /* Enhance footer text size for readability */
+    padding: 15px 0;
+    font-size: 14px; 
   }
 
   .header-container,
   .cta-container {
-    padding: 20px; /* Add more padding around content */
+    padding: 20px; 
   }
 
   .header-container{
@@ -115,7 +116,7 @@ body {
   }
 
   .chart-container {
-    margin: 10px; /* Reduce chart container margin */
-    padding: 10px; /* Adjust padding for smaller screens */
+    margin: 10px; 
+    padding: 10px; 
   }
 }
