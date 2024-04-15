@@ -1,4 +1,4 @@
-const backendUrl = process.env.REACT_APP_BACKEND_URL
+const backendUrl = "./"
 
 export async function fetchOperators() {
     try {
