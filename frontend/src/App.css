@@ -115,3 +115,7 @@ body {
     padding: 10px; /* Adjust padding for smaller screens */
   }
 }
+
+.carousel-item {
+  position: relative;
+}
