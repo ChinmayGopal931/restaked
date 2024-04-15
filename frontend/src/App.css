@@ -96,14 +96,19 @@ body {
   }
 
   .footer-container {
+    position: relative;
     padding: 15px 0; /* Increase footer padding */
     font-size: 14px; /* Enhance footer text size for readability */
   }
 
   .header-container,
   .cta-container {
-    margin-top: 10vh;
     padding: 20px; /* Add more padding around content */
+  }
+
+  .header-container{
+    margin-top: 20vh;
+
   }
 
   .chart-container {
