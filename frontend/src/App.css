@@ -43,6 +43,10 @@ body {
   height: 40vh;
 }
 
+.cta-container, .carousel-item {
+  position: relative
+}
+
 .card-container {
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -114,8 +118,4 @@ body {
     margin: 10px; /* Reduce chart container margin */
     padding: 10px; /* Adjust padding for smaller screens */
   }
-}
-
-.carousel-item {
-  position: relative;
 }
