@@ -1,0 +1,12 @@
+{
+    "name": "fullstack-app",
+    "version": "1.0.0",
+    "scripts": {
+      "start": "node backend/src/server.js",
+      "build": "cd frontend && npm install && npm run build"
+    },
+    "engines": {
+      "node": "14.x"
+    }
+  }
+  
