@@ -78,7 +78,7 @@ body {
 
   .navbar-container {
     min-height: 50px; /* Adjust navbar for touch accessibility */
-    height: 10vh;
+    height: 30vh;
     width: 100%; /* Ensure navbar covers full width */
   }
 
@@ -107,7 +107,7 @@ body {
   }
 
   .header-container{
-    margin-top: 30vh;
+    margin-top: 40vh;
   }
 
   .chart-container {
