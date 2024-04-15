@@ -102,6 +102,7 @@ body {
 
   .header-container,
   .cta-container {
+    margin-top: 10vh;
     padding: 20px; /* Add more padding around content */
   }
 
