@@ -3,7 +3,6 @@
   width: 30vh;
   border: none;
   border-radius: 8px;
-  overflow: hidden; 
   display: flex;
   flex-direction: column;
 }
