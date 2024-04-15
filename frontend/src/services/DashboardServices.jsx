@@ -22,7 +22,7 @@ export async function fetchOperators() {
 
 export async function fetchDataForOperator(selectedOperator) {
     try {
-        const url = `${backendUrl}api/operator-shares${selectedOperator}`;
+        const url = `${backendUrl}api/operator-shares/${selectedOperator}`;
         console.log(`Fetching shares for operator ${selectedOperator}`);
         const response = await fetch(url);
         const newData = await response.json();
