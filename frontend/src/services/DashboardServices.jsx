@@ -2,7 +2,7 @@ const backendUrl = "./"
 
 export async function fetchOperators() {
     try {
-        const response = await fetch(`${backendUrl}/api/unique-operators`);
+        const response = await fetch(`${backendUrl}api/unique-operators`);
         const data = await response.json();
         if (!response.ok) {
             throw new Error(data.message || 'Unable to fetch operators');
@@ -22,7 +22,7 @@ export async function fetchOperators() {
 
 export async function fetchDataForOperator(selectedOperator) {
     try {
-        const url = `${backendUrl}/api/operator-shares/${selectedOperator}`;
+        const url = `${backendUrl}/api/operator-shares${selectedOperator}`;
         console.log(`Fetching shares for operator ${selectedOperator}`);
         const response = await fetch(url);
         const newData = await response.json();
@@ -51,7 +51,7 @@ export async function fetchDataForOperator(selectedOperator) {
 
 export async function fetchTopOperators() {
     try {
-        const response = await fetch(`${backendUrl}/api/top-operators`);
+        const response = await fetch(`${backendUrl}api/top-operators`);
         const data = await response.json();
         if (!response.ok) {
             throw new Error(data.message || 'Unable to fetch top operators');
