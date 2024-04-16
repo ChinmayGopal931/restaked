@@ -25,11 +25,4 @@ async function callDelegationManagerEventLogs(){
 };
 
 
-cron.schedule('0 0 * * *', callDelegationManagerEventLogs, {
-    scheduled: true,
-    timezone: "Etc/UTC"
-});
-
-
-callDelegationManagerEventLogs()
 
