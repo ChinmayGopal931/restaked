@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node backend/src/server.js",
-    "checkData": "node backend/src/scripts/checkDatabase.js",
+    "parseAVSData": "node backend/src/scripts/populateAVSData.js",
     "heroku-postbuild": "cd frontend && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

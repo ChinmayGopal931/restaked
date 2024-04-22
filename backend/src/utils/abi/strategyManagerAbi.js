@@ -1,4 +1,4 @@
-const strategyManagerAbi = [
+const strategyManagerABI = [
   {
     inputs: [
       {
@@ -620,3 +620,5 @@ const strategyManagerAbi = [
     type: "function",
   },
 ];
+
+module.exports = { strategyManagerABI };
