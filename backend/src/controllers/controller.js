@@ -105,8 +105,9 @@ async function fetchUniqueOperators() {
           operatorName: metaData.name,
           operatorAddress: doc.operator,
           operatorWebsite: metaData.website,
-          operatorLogo: metaData.website,
-          operatorWebsite: metaData.website,
+          operatorLogo: metaData.logo,
+          operatorDescription: metaData.description,
+          operatorTwitter: metaData.twitter,
           uniqueStrategies: doc.uniqueStrategies,
           uniqueStakers: doc.uniqueStakers,
         };
@@ -195,25 +196,25 @@ async function rankOperatorsByShares() {
 }
 
 async function rankOperators() {
-  const operators = (await fetchUniqueOperators()).slice(0, 100);
+  const operators = (await fetchUniqueOperators()).slice(0, 10);
 
   const operatorShares = await Promise.all(
     operators.map((op) =>
       trackSharesForOperator(op.operatorAddress).then((shares) => {
         return {
           name: op.operatorName,
-          operator: op.operator,
           totalShares:
             shares.length > 0 ? shares[shares.length - 1].totalShares : 0,
-          operatorS: op.operator,
+          operators: op.operator,
           uniqueStrategies: op.uniqueStrategies,
           uniqueStakers: op.uniqueStakers,
           totalTVL: shares.length > 0 ? shares[shares.length - 1].totalTVL : 0,
           operatorName: op.operatorName,
           operatorAddress: op.operatorAddress,
           operatorWebsite: op.operatorWebsite,
+          operatorTwitter: op.operatorTwitter,
           operatorLogo: op.operatorLogo,
-          operatorWebsite: op.operatorWebsite,
+          operatorDescription: op.operatorDescription,
         };
       })
     )
