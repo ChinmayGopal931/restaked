@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend } from 'chart.js';
-import { fetchOperators, fetchDataForOperator, fetchTopOperators } from '../../services/DashboardServices'; 
+import { fetchOperators, fetchDataForOperator } from '../../services/DashboardServices'; 
 import OperatorSelect from '../../services/OperatorSelect'; 
 import TopOperatorsTable from '../../services/TopOperatorsTable'; 
 import './Dashboard.css'; 
@@ -12,7 +12,6 @@ function Dashboard() {
     const [operators, setOperators] = useState([]);
     const [selectedOperator, setSelectedOperator] = useState('');
     const [chartData, setChartData] = useState(null);
-    const [topOperators, setTopOperators] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
@@ -23,8 +22,6 @@ function Dashboard() {
         try {
             const ops = await fetchOperators();
             setOperators(ops);
-            const topOps = await fetchTopOperators();
-            setTopOperators(topOps);
         } catch (error) {
             console.error('Error fetching initial data:', error);
             setErrorMessage('Failed to load initial dashboard data.');
@@ -54,7 +51,7 @@ function Dashboard() {
             />
             <button onClick={handleFetchData} className="fetch-data-button btn btn-light btn-lg">Load Chart</button>
             {chartData ? <Line data={chartData} /> : <p>{errorMessage || 'Loading operators...'}</p>}
-            <TopOperatorsTable operators={topOperators} /> 
+            <TopOperatorsTable operators={operators} /> 
         </div>
     );
 }

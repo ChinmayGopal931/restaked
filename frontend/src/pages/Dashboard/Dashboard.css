@@ -24,10 +24,10 @@ button:hover {
 }
 
 .dashboard-container {
-  padding: 3rem;
+  padding: 5rem;
+  margin: 10rem;
   background-color: #333;
   color: white;
-  width: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -35,10 +35,14 @@ button:hover {
 }
 
 .fetch-data-button {
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .operator-select {
-  margin-bottom: 20px;
+  margin: 20px;
   width: 100%;
+}
+
+th, td {
+  padding: 10px 30px; 
 }

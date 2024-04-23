@@ -55,3 +55,5 @@ const AVSDirectoryABI = [
   { stateMutability: "payable", type: "fallback" },
   { stateMutability: "payable", type: "receive" },
 ];
+
+module.exports = { AVSDirectoryABI }

@@ -1147,4 +1147,4 @@ const delegationManagerAbi = [
   },
 ];
 
-module.exports = { strategyManagerAbi, delegationManagerAbi };
+module.exports = { delegationManagerAbi };

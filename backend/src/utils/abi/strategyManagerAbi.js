@@ -620,3 +620,5 @@ const strategyManagerAbi = [
     type: "function",
   },
 ];
+
+module.exports = { strategyManagerAbi }

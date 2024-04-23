@@ -355,4 +355,5 @@ const baseStrategyABI = [
     type: "function",
   },
 ];
+
 module.exports = { baseStrategyABI };
