@@ -1,4 +1,4 @@
-const backendUrl = "http://localhost:8080/"
+const backendUrl = "./"
 
 export async function fetchOperators() {
     try {
