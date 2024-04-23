@@ -1,7 +1,7 @@
-//require("dotenv").config({ path: "../.env" });
+require("dotenv").config({ path: "../.env" });
 const mongoose = require("mongoose");
 
-const uri = 'mongodb+srv://automycta:mzzSOCQ3UTkZxg54@restaked0.o1saw.mongodb.net/?retryWrites=true&w=majority&appName=Restaked0';
+const uri = process.env.MONGODB_URI
 
 const connectDB = async () => {
   try {

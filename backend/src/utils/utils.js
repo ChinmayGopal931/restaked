@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "../../.env" });
 const { Web3 } = require("web3");
 const { baseStrategyABI } = require("./abi/BaseStrategyABI"); // Assuming contractInstances is correctly exported as an object
-const web3 = new Web3("https://mainnet.infura.io/v3/32a39c105d1d49f395bcb2ce44014d1d");
+const web3 = new Web3(process.env.RPC_URL);
 
 
 const getCurrentBlockNumber = async () => {
