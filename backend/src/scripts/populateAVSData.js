@@ -2,6 +2,7 @@ require("dotenv").config();
 const { Web3 } = require("web3");
 const { avsManager } = require("../services/contracts");
 const { saveAVSData } = require("../scripts/mongoose/saveAVSData");
+const connectDB = require("../db/db");
 
 let avsDataMap = {
   "0x870679e138bcdf293b7ff14dd44b70fc97e12fc0": [],
@@ -44,17 +45,18 @@ async function parseAVSData(contract, eventName) {
     }
     fromBlock = endBlock + 1;
   }
-
-  console.log(avsDataMap);
-  //   if (avsData.length > 0) {
-  //     await saveToMongoDB(DelegationManager, avsData);
-  //   }
 }
 
 parseAVSData(avsManager, "OperatorAVSRegistrationStatusUpdated")
   .then(() => {
     console.log("Finished checking events.");
-    saveAVSData(avsDataMap);
+    connectDB()
+      .then(() => {
+        saveAVSData(avsDataMap);
+      })
+      .catch((error) => {
+        console.error("Failed to connect to MongoDB:", error);
+      });
   })
   .catch((err) => {
     console.error("Error checking events:", err);

@@ -34,11 +34,10 @@ const DelegationManagerSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    avsOptIns: [
-      {
-        type: String,
-      },
-    ],
+    avsOptIns: {
+      type: Array,
+      required: false,
+    },
   },
   {
     timestamps: true,

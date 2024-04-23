@@ -148,12 +148,6 @@ async function trackSharesForOperator(operator) {
         totalTVL -= underlyingTokens; // Subtract the TVL from shares converted
       }
 
-      console.log({
-        timestamp: event.timestamp,
-        totalShares: totalShares,
-        totalTVL: totalTVL,
-      });
-
       // Push the new state to the timeline after each event is processed
       sharesTimeline.push({
         timestamp: event.timestamp,

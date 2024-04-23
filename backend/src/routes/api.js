@@ -9,7 +9,6 @@ const {
 router.get("/unique-operators", async (req, res) => {
   try {
     const operators = await rankOperatorsByShares();
-    console.log(operators);
     res.json({ success: true, data: operators });
   } catch (error) {
     console.error("Error fetching unique operators:", error);
