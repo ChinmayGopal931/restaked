@@ -1,10 +1,10 @@
 const DelegationManager = require("../db/DelegationManager");
 const OperatorProfile = require("../db/OperatorProfile");
-const TotalTVLOverTime = require("../db/TVLOverTime"); 
+const TotalTVLOverTime = require("../db/TVLOverTime");
 const { getSharesToTVL } = require("../utils/utils");
-const connectDB = require('../db/db');
+const connectDB = require("../db/db");
 
-connectDB()
+connectDB();
 
 async function fetchUniqueOperators() {
   try {
@@ -29,13 +29,13 @@ async function fetchUniqueOperators() {
                 strategy: { $exists: true },
               },
             },
-            { $sort: { timestamp: -1 } },  
+            { $sort: { timestamp: -1 } },
             {
               $group: {
                 _id: "$operator",
                 uniqueStakers: { $addToSet: "$staker" },
                 uniqueStrategies: { $addToSet: "$strategy" },
-                avsOptIns: { $first: "$avsOptIns" }  
+                avsOptIns: { $first: "$avsOptIns" },
               },
             },
           ],
@@ -77,11 +77,8 @@ async function fetchUniqueOperators() {
                   },
                 },
                 avsOptIns: {
-                  $arrayElemAt: [
-                    "$stakersAndStrategies.avsOptIns",
-                    0
-                  ] 
-                }
+                  $arrayElemAt: ["$stakersAndStrategies.avsOptIns", 0],
+                },
               },
             },
           },
@@ -123,7 +120,7 @@ async function fetchUniqueOperators() {
           operatorTwitter: metaData.twitter,
           uniqueStrategies: doc.uniqueStrategies,
           uniqueStakers: doc.uniqueStakers,
-          avsOptIns: doc.avsOptIns
+          avsOptIns: doc.avsOptIns,
         };
       })
     );
@@ -139,10 +136,10 @@ async function trackSharesForOperator(operatorAddress) {
   try {
     const events = await DelegationManager.find({
       operator: operatorAddress,
-      event: { $in: ["OperatorSharesIncreased", "OperatorSharesDecreased"] }
+      event: { $in: ["OperatorSharesIncreased", "OperatorSharesDecreased"] },
     })
-    .sort({ timestamp: 1 })
-    .select("event shares strategy timestamp -_id");
+      .sort({ timestamp: 1 })
+      .select("event shares strategy timestamp -_id");
 
     let totalTVL = 0;
     const sharesTimeline = [];
@@ -168,14 +165,14 @@ async function trackSharesForOperator(operatorAddress) {
       const tvlEntry = new TotalTVLOverTime({
         operator: operatorAddress,
         totalTVL: totalTVL,
-        timestamp: new Date(event.timestamp * 1000)
+        timestamp: new Date(event.timestamp * 1000),
       });
       await tvlEntry.save();
 
-      console.log(tvlEntry)
+      console.log(tvlEntry);
 
       sharesTimeline.push({
-        totalTVL: totalTVL
+        totalTVL: totalTVL,
       });
     }
 
@@ -186,14 +183,13 @@ async function trackSharesForOperator(operatorAddress) {
   }
 }
 
-
 async function rankOperators() {
   try {
     let operators = await fetchUniqueOperators();
 
     const operatorShares = await Promise.all(
-      operators.map(op => 
-          trackSharesForOperator(op.operatorAddress).then(shares => ({
+      operators.map((op) =>
+        trackSharesForOperator(op.operatorAddress).then((shares) => ({
           operatorName: op.operatorName,
           operatorAddress: op.operatorAddress,
           operatorWebsite: op.operatorWebsite,
@@ -203,14 +199,14 @@ async function rankOperators() {
           uniqueStrategies: op.uniqueStrategies,
           uniqueStakers: op.uniqueStakers.length,
           totalTVL: shares.length > 0 ? shares[shares.length - 1].totalTVL : 0,
-          avsOptIns: op.avsOptIns
+          avsOptIns: op.avsOptIns,
         }))
       )
     );
 
-    const validOperators = operatorShares.filter(op => op.totalTVL >= 32);
+    const validOperators = operatorShares.filter((op) => op.totalTVL >= 32);
 
-    console.log(validOperators)
+    console.log(validOperators);
 
     await OperatorProfile.insertMany(validOperators);
     console.log("Operators ranked and saved successfully.");
@@ -219,14 +215,14 @@ async function rankOperators() {
   }
 }
 
-rankOperators()
+rankOperators();
 
 OperatorProfile.find()
-  .then(docs => {
-    console.log(JSON.stringify(docs, null, 2)); 
+  .then((docs) => {
+    console.log(JSON.stringify(docs, null, 2));
   })
-  .catch(err => {
-    console.error('Error fetching documents:', err);
+  .catch((err) => {
+    console.error("Error fetching documents:", err);
   });
 
 module.exports = {

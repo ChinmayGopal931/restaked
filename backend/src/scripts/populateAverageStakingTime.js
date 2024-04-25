@@ -1,13 +1,16 @@
 require("dotenv").config();
-const DelegationManager = require("../db/DelegationManager");
 const { delegationManager } = require("../services/contracts");
+const {
+  saveAvgStakerData,
+} = require("../scripts/mongoose/saveAverageStakerTimeData");
+const connectDB = require("../db/db");
 
-const { weiToEth, saveToMongoDB } = require("../utils/utils");
 const { Web3 } = require("web3");
 
 const web3 = new Web3(process.env.RPC_URL);
 const operatorStakerMap = new Map();
 const operatorTimeMap = new Map();
+const operatorAvgStakingTimeMap = new Map();
 
 async function processEvents(events, isDelegated = true) {
   const blockPromises = events.map((event) =>
@@ -27,7 +30,7 @@ async function processEvents(events, isDelegated = true) {
         const startTime = operatorStakerMap.get(key);
         operatorStakerMap.delete(key); //Remove from map after processing
 
-        if (!key) contiue; // This is only due to failures in INFURA to give us all the data
+        if (!startTime) continue; // This is only due to failures in INFURA to give us all the data
 
         const timeDuration = block.timestamp - startTime;
         const operator = event.returnValues.operator;
@@ -44,9 +47,9 @@ async function processEvents(events, isDelegated = true) {
 }
 
 async function checkEventsAtBlock(contract) {
-  let fromBlock = 19612227;
+  let fromBlock = 19713365;
   const toBlock = Number(await web3.eth.getBlockNumber());
-  const batchSize = 5000;
+  const batchSize = 500;
 
   console.log("Starting fetch from:", fromBlock, "to:", toBlock);
 
@@ -59,7 +62,7 @@ async function checkEventsAtBlock(contract) {
         "StakerDelegated",
         options
       );
-      console.log("Processing", delegatedEvents.length, "delegated events.");
+      console.log("Processing", delegatedEvents.length, "delegated events");
       await processEvents(delegatedEvents, true);
 
       // Fetch and process undelegated events
@@ -67,30 +70,33 @@ async function checkEventsAtBlock(contract) {
         "StakerUndelegated",
         options
       );
-      console.log(
-        "Processing",
-        undelegatedEvents.length,
-        "undelegated events."
-      );
+      console.log("Processing", undelegatedEvents.length, "undelegated events");
       await processEvents(undelegatedEvents, false);
-
-      console.log("Operator time object:", operatorTimeMap);
-
-      console.log(operatorTimeMap);
     } catch (error) {
       console.error(
         `Error fetching events from block ${fromBlock} to ${endBlock}:`,
         error
       );
+      if (error.name === "FetchError") {
+        fromBlock = Math.min(fromBlock + 20 - 1, toBlock) + 1; // Skipping 20 events
+        console.log("Skipping 20 events");
+        continue;
+      }
     }
+    console.log(
+      "Est Completion Percentage: " +
+        ((endBlock - fromBlock) * 100) / (toBlock - fromBlock) +
+        "%"
+    );
     fromBlock = endBlock + 1;
   }
 
-  for (const key in operatorStakerMap) {
-    const currentTime = Math.floor(Date.now() / 1000);
+  for (let key of operatorStakerMap.keys()) {
+    const currentTime = BigInt(Math.floor(Date.now() / 1000));
 
     const operatorString = key.split("-");
     const operator = operatorString[0];
+    const startTime = operatorStakerMap.get(key);
 
     if (operatorTimeMap.has(operator)) {
       operatorTimeMap.get(operator).push(currentTime - startTime);
@@ -99,14 +105,29 @@ async function checkEventsAtBlock(contract) {
     }
   }
 
-  console.log(operatorTimeMap);
+  for (let key of operatorTimeMap.keys()) {
+    const avgTime = calculateAverage(operatorTimeMap.get(key));
+    operatorAvgStakingTimeMap.set(key, avgTime);
+  }
 }
 
-checkEventsAtBlock(delegationManager)
+connectDB()
   .then(() => {
-    console.log("Finished checking events.");
-    console.log(operatorTimeMap);
+    checkEventsAtBlock(delegationManager)
+      .then(() => {
+        console.log("Finished checking events.");
+        saveAvgStakerData(operatorAvgStakingTimeMap);
+      })
+      .catch((err) => {
+        console.error("Error checking events:", err);
+      });
   })
-  .catch((err) => {
-    console.error("Error checking events:", err);
+  .catch((error) => {
+    console.error("Failed to connect to MongoDB:", error);
   });
+
+//HELPER FUNCTIONS
+function calculateAverage(arr) {
+  const total = arr.reduce((acc, val) => acc + val, BigInt(0));
+  return Number(total / BigInt(arr.length));
+}

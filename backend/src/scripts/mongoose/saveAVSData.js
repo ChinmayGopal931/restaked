@@ -1,5 +1,4 @@
-const DelegationManager = require("../../db/DelegationManager");
-const { ethers } = require("ethers");
+const DelegationManager = require("../../db/OperatorProfile");
 
 /**
  * Function to add or update an AVS entry with new operators.
