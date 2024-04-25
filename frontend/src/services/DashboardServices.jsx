@@ -26,7 +26,7 @@ export async function fetchOperators() {
                 operator: op.operatorAddress,
                 stakers: op.uniqueStakers,
                 avsOptIns: avsOptInsNames.length ? avsOptInsNames.join(', ') : 'None',  // Join names for display
-                totalTVL: op.totalTVL
+                totalTVL: parseFloat(op.totalTVL).toFixed(2)
             };
         });
     } catch (error) {
