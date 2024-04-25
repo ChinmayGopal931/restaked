@@ -34,7 +34,10 @@ async function parseAVSData(contract, eventName) {
         if (event.returnValues.status == 1) {
           addOperatorToAvs(event.returnValues.avs, event.returnValues.operator);
         } else if (event.returnValues.status == 0) {
-          addOperatorToAvs(event.returnValues.avs, event.returnValues.operator);
+          removeOperatorFromAvs(
+            event.returnValues.avs,
+            event.returnValues.operator
+          );
         }
       }
     } catch (error) {
