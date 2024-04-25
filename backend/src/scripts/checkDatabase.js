@@ -1,12 +1,17 @@
-const DelegationManager = require("../db/DelegationManager");
-const { weiToEth, saveToMongoDB } = require("../utils/utils");
+require("dotenv").config();
+const { weiToEth } = require("../utils/utils");
 const { Web3 } = require("web3");
 const web3 = new Web3(process.env.RPC_URL);
+const { delegationManager } = require("../services/contracts");
 
-async function checkEventsAtBlock(contract, eventName) {
-  let fromBlock = 19612227;
-  const toBlock = Number(await web3.eth.getBlockNumber());
-  const batchSize = 500;
+async function checkEventsAtBlock(
+  contract = delegationManager,
+  eventName = "OperatorSharesIncreased"
+) {
+  console.log(";ere", eventName);
+  let fromBlock = 19691387;
+  const toBlock = 19691387;
+  const batchSize = 5000;
 
   console.log("Starting fetch from:", fromBlock, "to:", toBlock);
 
@@ -22,21 +27,25 @@ async function checkEventsAtBlock(contract, eventName) {
       const blockCache = {};
 
       for (const event of events) {
-        console.log(event.event)
-        if (!blockCache[event.blockNumber]) {
-          blockCache[event.blockNumber] = await web3.eth.getBlock(
-            event.blockNumber
-          );
-        }
-        const block = blockCache[event.blockNumber];
+        // if (!blockCache[event.blockNumber]) {
+        //   blockCache[event.blockNumber] = await web3.eth.getBlock(
+        //     event.blockNumber
+        //   );
+        // }
+        // const block = blockCache[event.blockNumber];
 
+        console.log(event);
         if (
           [
-            "OperatorSharesIncreased",
-            "OperatorSharesDecreased",
-            "OperatorMetadataURIUpdated",
+            "OperatorAVSRegistrationStatusUpdated",
+            // "OperatorSharesDecreased",
+            // "OperatorMetadataURIUpdated",
           ].includes(event.event)
         ) {
+          if (event.event === "OperatorAVSRegistrationStatusUpdated") {
+            console.log(event.event);
+            return;
+          }
           let dataPoint = {
             event: event.event,
             operator: event.returnValues.operator,
@@ -67,11 +76,14 @@ async function checkEventsAtBlock(contract, eventName) {
     }
     fromBlock = endBlock + 1;
   }
-
-  if (eventData.length > 0) {
-    await saveToMongoDB(DelegationManager, eventData);
-  }
 }
 
+checkEventsAtBlock()
+  .then(() => {
+    console.log("Finished checking events.");
+  })
+  .catch((err) => {
+    console.error("Error checking events:", err);
+  });
 
 module.exports = { checkEventsAtBlock };

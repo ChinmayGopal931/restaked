@@ -1,23 +1,23 @@
 {
-    "name": "fullstack-app",
-    "version": "1.0.0",
-    "scripts": {
-      "start": "node backend/src/server.js",
-      "heroku-postbuild": "cd frontend && npm install && npm run build",
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "engines": {
-      "node": "21.6.2"
-    },
-    "dependencies": {
-      "cors": "^2.8.5",
-      "date-fns": "^3.6.0",
-      "dotenv": "^16.4.5",
-      "express": "^4.19.2",
-      "mongodb": "^6.5.0",
-      "mongoose": "^8.3.1",
-      "node-cron": "^3.0.3",
-      "web3": "^4.7.0"
-    }
+  "name": "fullstack-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "checkData": "node backend/src/scripts/checkDatabase.js",
+    "heroku-postbuild": "cd frontend && npm install && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "21.6.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.1",
+    "node-cron": "^3.0.3",
+    "web3": "^4.7.0"
   }
-  
+}
