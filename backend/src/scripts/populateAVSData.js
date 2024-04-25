@@ -4,6 +4,7 @@ const { avsManager } = require("../services/contracts");
 const { saveAVSData } = require("../scripts/mongoose/saveAVSData");
 const connectDB = require("../db/db");
 
+//@DEV TODO: NEED A WAY TO PULL THIS AUTOMATICALLY
 let avsDataMap = {
   "0x870679e138bcdf293b7ff14dd44b70fc97e12fc0": [],
   "0x71a77037870169d47aad6c2c9360861a4c0df2bf": [],
