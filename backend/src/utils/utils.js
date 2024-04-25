@@ -1,6 +1,8 @@
 require("dotenv").config({ path: "../../.env" });
 const { Web3 } = require("web3");
 const { baseStrategyABI } = require("./abi/BaseStrategyABI"); // Assuming contractInstances is correctly exported as an object
+const web3 = new Web3(process.env.RPC_URL);
+
 
 const getCurrentBlockNumber = async () => {
   try {
@@ -15,13 +17,13 @@ const getCurrentBlockNumber = async () => {
 async function fetchLastBlock() {
   const lastEventRaw = await DelegationManager.findOne().sort({ block: -1 });
   const lastEvent = Number(lastEventRaw);
-  return lastEvent ? lastEvent.block + 1 : 19612227; // Start from a default block if none is found
+  return lastEvent ? lastEvent.block + 1 : 19612227; 
 }
 
-async function getSharesToTVL(strategyAddress, shares) {
-  if (strategyAddress == "0xbeaC0eeEeeeeEEeEeEEEEeeEEeEeeeEeeEEBEaC0") return 0;
-  const web3 = new Web3(process.env.RPC_URL);
+async function getSharesToTVL(strategyAddress) {
+  if (strategyAddress == "0xbeaC0eeEeeeeEEeEeEEEEeeEEeEeeeEeeEEBEaC0") return 1;
 
+  let shares = 1000000;
   let underlyingTokens;
 
   const strategyContract = new web3.eth.Contract(
@@ -31,10 +33,10 @@ async function getSharesToTVL(strategyAddress, shares) {
 
   try {
     const underlyingTokensRaw = await strategyContract.methods
-      .sharesToUnderlyingView(shares * 1e18)
+      .sharesToUnderlyingView(shares)
       .call();
 
-    underlyingTokens = Number(underlyingTokensRaw) / 1e18;
+    underlyingTokens = Number(underlyingTokensRaw) / 1000000;
   } catch (error) {
     console.error(`Error fetching data for ${strategyAddress}: ${error}`);
     return 0;

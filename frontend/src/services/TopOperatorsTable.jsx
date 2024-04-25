@@ -1,15 +1,8 @@
-import { useMemo } from 'react';
+const TopOperatorsTable = ({ operators }) => {
+    console.log("DEBUG", operators);
 
-const TopOperatorsTable = ({ operators = [] }) => {
-
-    const sortedOperators = useMemo(() => {
-        if (operators.length > 0) {
-            return operators
-                .sort((a, b) => b.totalShares - a.totalShares)
-                .slice(0, 20);
-        }
-        return [];
-    }, [operators]);  
+    // Use slice to get only the first 20 operators
+    const topTwentyOperators = operators.slice(0, 20);
 
     return (
         <div className="top-operators-table">
@@ -19,14 +12,16 @@ const TopOperatorsTable = ({ operators = [] }) => {
                         <th>Rank</th>
                         <th>Operator</th>
                         <th>TVL (ETH)</th>
+                        <th>Stakers</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {sortedOperators.map((operator, index) => (
+                    {topTwentyOperators.map((operator, index) => (
                         <tr key={operator.operator || index}>
                             <td>{index + 1}</td>
                             <td>{operator.name}</td>
-                            <td>{operator.totalShares.toFixed(2)}</td>
+                            <td>{operator.totalTVL}</td>
+                            <td>{operator.stakers}</td>
                         </tr>
                     ))}
                 </tbody>

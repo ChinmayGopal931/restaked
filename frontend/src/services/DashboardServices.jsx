@@ -9,9 +9,10 @@ export async function fetchOperators() {
         }
         return data.data.map(op => {
             return { 
-                name: op.name, 
-                operator: op.operator, 
-                totalShares: op.totalShares  
+                name: op.operatorName, 
+                operator: op.operatorAddress, 
+                stakers: op.uniqueStakers,
+                totalTVL: op.totalTVL  
             };
         });
     } catch (error) {
@@ -32,8 +33,8 @@ export async function fetchDataForOperator(selectedOperator) {
         return {
             labels: newData.data.map(item => {
 
-                const date = new Date(item.x * 1000);
-                return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
+                const date = item.x;
+                return date;
             }),
             datasets: [{
                 label: 'Cumulative Shares (ETH)',
@@ -49,24 +50,3 @@ export async function fetchDataForOperator(selectedOperator) {
     }
 }
 
-export async function fetchTopOperators() {
-    try {
-        const response = await fetch(`${backendUrl}api/top-operators`);
-        const data = await response.json();
-        if (!response.ok) {
-            throw new Error(data.message || 'Unable to fetch top operators');
-        }
-
-        return data.data.map((op, index) => {
-            return {
-                rank: index + 1,
-                name: op.name,
-                operator: op.operator,
-                totalShares: op.totalShares
-            };
-        });
-    } catch (error) {
-        console.error('Failed to fetch top operators:', error);
-        throw error; 
-    }
-}

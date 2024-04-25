@@ -1,3 +1,6 @@
+
+const { Web3 } = require("web3");
+const web3 = new Web3(process.env.RPC_URL);
 const {checkEventsAtBlock} = require('./delegationManagerMethods')
 const {delegationManager} = require('./contracts')
 const cron = require('node-cron');

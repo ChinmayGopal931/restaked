@@ -1148,3 +1148,4 @@ const delegationManagerABI = [
 ];
 
 module.exports = { delegationManagerABI };
+

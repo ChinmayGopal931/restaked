@@ -1,5 +1,10 @@
 const DelegationManager = require("../db/DelegationManager");
+const OperatorProfile = require("../db/OperatorProfile");
+const TotalTVLOverTime = require("../db/TVLOverTime"); 
 const { getSharesToTVL } = require("../utils/utils");
+const connectDB = require('../db/db');
+
+connectDB()
 
 async function fetchUniqueOperators() {
   try {
@@ -121,38 +126,47 @@ async function fetchUniqueOperators() {
   }
 }
 
-async function trackSharesForOperator(operator) {
+async function trackSharesForOperator(operatorAddress) {
   try {
-    const events = await DelegationManager.find({ operator })
-      .sort({ timestamp: 1 })
-      .select("event shares strategy timestamp -_id");
+    const events = await DelegationManager.find({
+      operator: operatorAddress,
+      event: { $in: ["OperatorSharesIncreased", "OperatorSharesDecreased"] }
+    })
+    .sort({ timestamp: 1 })
+    .select("event shares strategy timestamp -_id");
 
-    let totalShares = 0;
     let totalTVL = 0;
     const sharesTimeline = [];
+    const strategyCache = {};
 
     for (const event of events) {
-      if (event.event === "OperatorSharesIncreased") {
-        const underlyingTokens = await getSharesToTVL(
-          event.strategy,
-          event.shares
-        );
-        totalShares += event.shares; // Add shares
-        totalTVL += underlyingTokens; // Add the TVL from shares converted
-      } else if (event.event === "OperatorSharesDecreased") {
-        const underlyingTokens = await getSharesToTVL(
-          event.strategy,
-          event.shares
-        );
-        totalShares -= event.shares; // Subtract shares
-        totalTVL -= underlyingTokens; // Subtract the TVL from shares converted
+      let underlyingTokens = 0;
+
+      if (strategyCache[event.strategy]) {
+        underlyingTokens = strategyCache[event.strategy] * event.shares;
+      } else {
+        const ratio = await getSharesToTVL(event.strategy);
+        strategyCache[event.strategy] = ratio;
+        underlyingTokens = ratio * event.shares;
       }
 
-      // Push the new state to the timeline after each event is processed
-      sharesTimeline.push({
-        timestamp: event.timestamp,
-        totalShares: totalShares,
+      if (event.event === "OperatorSharesIncreased") {
+        totalTVL += underlyingTokens;
+      } else if (event.event === "OperatorSharesDecreased") {
+        totalTVL -= underlyingTokens;
+      }
+
+      const tvlEntry = new TotalTVLOverTime({
+        operator: operatorAddress,
         totalTVL: totalTVL,
+        timestamp: new Date(event.timestamp * 1000)
+      });
+      await tvlEntry.save();
+
+      console.log(tvlEntry)
+
+      sharesTimeline.push({
+        totalTVL: totalTVL
       });
     }
 
@@ -163,68 +177,48 @@ async function trackSharesForOperator(operator) {
   }
 }
 
-async function rankOperatorsByShares() {
-  const operators = await fetchUniqueOperators();
-  const operatorShares = await Promise.all(
-    operators.map(
-      async (op) =>
-        await trackSharesForOperator(op.operatorAddress).then((shares) => {
-          return {
-            name: op.operatorName,
-            operatorAddress: op.operatorAddress,
-            totalShares:
-              shares.length > 0 ? shares[shares.length - 1].totalShares : 0,
-            totalTVL:
-              shares.length > 0 ? shares[shares.length - 1].totalTVL * 3100 : 0, //TODO NEEDS TO BE FIXED
-          };
-        })
-    )
-  );
-
-  const rankedOperators = operatorShares.sort(
-    (a, b) => b.totalShares - a.totalShares
-  );
-  rankedOperators.forEach((op, index) => (op.rank = index + 1));
-
-  return rankedOperators;
-}
 
 async function rankOperators() {
-  const operators = (await fetchUniqueOperators()).slice(0, 10);
+  try {
+    let operators = await fetchUniqueOperators();
 
-  const operatorShares = await Promise.all(
-    operators.map((op) =>
-      trackSharesForOperator(op.operatorAddress).then((shares) => {
-        return {
-          name: op.operatorName,
-          totalShares:
-            shares.length > 0 ? shares[shares.length - 1].totalShares : 0,
-          operators: op.operator,
-          uniqueStrategies: op.uniqueStrategies,
-          uniqueStakers: op.uniqueStakers,
-          totalTVL: shares.length > 0 ? shares[shares.length - 1].totalTVL : 0,
+    const operatorShares = await Promise.all(
+      operators.map(op =>
+        trackSharesForOperator(op.operatorAddress).then(shares => ({
           operatorName: op.operatorName,
           operatorAddress: op.operatorAddress,
           operatorWebsite: op.operatorWebsite,
           operatorTwitter: op.operatorTwitter,
           operatorLogo: op.operatorLogo,
           operatorDescription: op.operatorDescription,
-        };
-      })
-    )
-  );
+          uniqueStrategies: op.uniqueStrategies,
+          uniqueStakers: op.uniqueStakers.length,
+          totalTVL: shares.length > 0 ? shares[shares.length - 1].totalTVL : 0
+        }))
+      )
+    );
 
-  const rankedOperators = operatorShares.sort(
-    (a, b) => b.totalShares - a.totalShares
-  );
-  rankedOperators.forEach((op, index) => (op.rank = index + 1));
+    const validOperators = operatorShares.filter(op => op.totalTVL >= 32);
 
-  return rankedOperators;
+    console.log(validOperators)
+
+    await OperatorProfile.insertMany(validOperators);
+    console.log("Operators ranked and saved successfully.");
+  } catch (error) {
+    console.error("Failed to save operators:", error);
+  }
 }
 
+rankOperators()
+
+OperatorProfile.find()
+  .then(docs => {
+    console.log(JSON.stringify(docs, null, 2)); 
+  })
+  .catch(err => {
+    console.error('Error fetching documents:', err);
+  });
+
 module.exports = {
-  fetchUniqueOperators,
   trackSharesForOperator,
-  rankOperatorsByShares,
-  rankOperators,
 };

@@ -1,4 +1,3 @@
-require("dotenv").config({ path: "../../.env" });
 const DelegationManager = require("../db/DelegationManager");
 const { weiToEth, saveToMongoDB } = require("../utils/utils");
 const { Web3 } = require("web3");
@@ -7,7 +6,7 @@ const web3 = new Web3(process.env.RPC_URL);
 async function checkEventsAtBlock(contract, eventName) {
   let fromBlock = 19612227;
   const toBlock = Number(await web3.eth.getBlockNumber());
-  const batchSize = 5000;
+  const batchSize = 500;
 
   console.log("Starting fetch from:", fromBlock, "to:", toBlock);
 
@@ -23,6 +22,7 @@ async function checkEventsAtBlock(contract, eventName) {
       const blockCache = {};
 
       for (const event of events) {
+        console.log(event.event)
         if (!blockCache[event.blockNumber]) {
           blockCache[event.blockNumber] = await web3.eth.getBlock(
             event.blockNumber
@@ -72,5 +72,6 @@ async function checkEventsAtBlock(contract, eventName) {
     await saveToMongoDB(DelegationManager, eventData);
   }
 }
+
 
 module.exports = { checkEventsAtBlock };

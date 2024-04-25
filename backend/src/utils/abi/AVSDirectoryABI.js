@@ -339,3 +339,4 @@ const AVSDirectoryABI = [
   },
 ];
 module.exports = { AVSDirectoryABI };
+

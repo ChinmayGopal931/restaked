@@ -22,9 +22,6 @@ export default function Navbar({ links }) {
             </li>
           ))}
         </ul>
-          <div className="ms-auto">
-          <StripeButton />
-          </div>
       </div>
     </nav>
   );
