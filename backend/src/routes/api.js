@@ -8,8 +8,8 @@ connectDB()
 
 router.get("/unique-operators", async (req, res) => {
   try {
+
     const operators = await Operator.find().sort({ totalTVL: -1 });
-    console.log(operators)
     res.json({ success: true, data: operators });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to fetch operators', error: error.message });

@@ -1,4 +1,4 @@
-const delegationManagerAbi = [
+const delegationManagerABI = [
   {
     inputs: [
       {
@@ -1147,4 +1147,5 @@ const delegationManagerAbi = [
   },
 ];
 
-module.exports = { delegationManagerAbi };
+module.exports = { delegationManagerABI };
+
