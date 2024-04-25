@@ -1,6 +1,6 @@
 require("dotenv").config({ path: "../../.env" });
 const { Web3 } = require("web3");
-const web3 = new Web3(process.env.RPC_URL);
+const web3 = new Web3("https://mainnet.infura.io/v3/9c283000fc464e928d13cc9c05d4e640");
 const { strategyManagerABI } = require("../utils/abi/strategyManagerABI");
 const { delegationManagerABI } = require("../utils/abi/DelegationManagerABI");
 const { AVSDirectoryABI } = require("../utils/abi/AVSDirectoryABI");

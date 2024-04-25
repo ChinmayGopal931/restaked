@@ -29,11 +29,13 @@ async function fetchUniqueOperators() {
                 strategy: { $exists: true },
               },
             },
+            { $sort: { timestamp: -1 } },  
             {
               $group: {
                 _id: "$operator",
                 uniqueStakers: { $addToSet: "$staker" },
                 uniqueStrategies: { $addToSet: "$strategy" },
+                avsOptIns: { $first: "$avsOptIns" }  
               },
             },
           ],
@@ -74,6 +76,12 @@ async function fetchUniqueOperators() {
                     },
                   },
                 },
+                avsOptIns: {
+                  $arrayElemAt: [
+                    "$stakersAndStrategies.avsOptIns",
+                    0
+                  ] 
+                }
               },
             },
           },
@@ -115,6 +123,7 @@ async function fetchUniqueOperators() {
           operatorTwitter: metaData.twitter,
           uniqueStrategies: doc.uniqueStrategies,
           uniqueStakers: doc.uniqueStakers,
+          avsOptIns: doc.avsOptIns
         };
       })
     );
@@ -183,8 +192,8 @@ async function rankOperators() {
     let operators = await fetchUniqueOperators();
 
     const operatorShares = await Promise.all(
-      operators.map(op =>
-        trackSharesForOperator(op.operatorAddress).then(shares => ({
+      operators.map(op => 
+          trackSharesForOperator(op.operatorAddress).then(shares => ({
           operatorName: op.operatorName,
           operatorAddress: op.operatorAddress,
           operatorWebsite: op.operatorWebsite,
@@ -193,7 +202,8 @@ async function rankOperators() {
           operatorDescription: op.operatorDescription,
           uniqueStrategies: op.uniqueStrategies,
           uniqueStakers: op.uniqueStakers.length,
-          totalTVL: shares.length > 0 ? shares[shares.length - 1].totalTVL : 0
+          totalTVL: shares.length > 0 ? shares[shares.length - 1].totalTVL : 0,
+          avsOptIns: op.avsOptIns
         }))
       )
     );

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const operatorSchema = new mongoose.Schema({
+const OperatorSchema = new mongoose.Schema({
     operatorName: { type: String, required: true },
     operatorAddress: { type: String, required: true },
     operatorWebsite: { type: String },
@@ -9,11 +9,12 @@ const operatorSchema = new mongoose.Schema({
     operatorDescription: { type: String },
     uniqueStrategies: [{ type: String }], 
     uniqueStakers: { type: Number, default: 0 },
-    totalTVL: { type: Number, required: true }
+    totalTVL: { type: Number, required: true },
+    avsOptIns: {type: Array, required: true, default: []}
 }, {
     timestamps: true  
 });
 
-const OperatorProfile = mongoose.model('Operator', operatorSchema);
+const OperatorProfile = mongoose.model('Operator', OperatorSchema);
 
 module.exports = OperatorProfile;

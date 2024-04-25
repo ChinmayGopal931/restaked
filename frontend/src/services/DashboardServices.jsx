@@ -12,6 +12,7 @@ export async function fetchOperators() {
                 name: op.operatorName, 
                 operator: op.operatorAddress, 
                 stakers: op.uniqueStakers,
+                avsOptIns: op.avsOptIns.length,
                 totalTVL: op.totalTVL  
             };
         });

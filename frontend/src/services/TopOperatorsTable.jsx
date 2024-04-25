@@ -1,7 +1,6 @@
 const TopOperatorsTable = ({ operators }) => {
     console.log("DEBUG", operators);
 
-    // Use slice to get only the first 20 operators
     const topTwentyOperators = operators.slice(0, 20);
 
     return (
@@ -13,6 +12,7 @@ const TopOperatorsTable = ({ operators }) => {
                         <th>Operator</th>
                         <th>TVL (ETH)</th>
                         <th>Stakers</th>
+                        <th>AVS Opt-Ins</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,6 +22,7 @@ const TopOperatorsTable = ({ operators }) => {
                             <td>{operator.name}</td>
                             <td>{operator.totalTVL}</td>
                             <td>{operator.stakers}</td>
+                            <td>{operator.avsOptIns}</td>
                         </tr>
                     ))}
                 </tbody>

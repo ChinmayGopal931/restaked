@@ -11,6 +11,11 @@ body {
   color: aliceblue;
 }
 
+.header-container{
+  margin-top: 10vh;
+}
+
+
 .navbar-container {
   position: fixed;
   top: 0;
