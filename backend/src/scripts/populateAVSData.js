@@ -12,12 +12,12 @@ let avsDataMap = {
   "0x23221c5bb90c7c57ecc1e75513e2e4257673f0ef": [],
   "0x6026b61bdd2252160691cb3f6005b6b72e0ec044": [],
   "0x35f4f28a8d3ff20eed10e087e8f96ea2641e6aa2": [],
-  "0xed2f4d90b073128ae6769a9a8d51547b1df766c8": [],
+  "0xed2f4d90b073128ae6769a9A8D51547B1Df766C8": [],
   "0x9fc952bdcbb7daca7d420fa55b942405b073a89d": [],
 };
 
 async function parseAVSData(contract, eventName) {
-  let fromBlock = 19713365;
+  let fromBlock = 19492759;
   const web3 = new Web3(process.env.RPC_URL);
   const toBlock = Number(await web3.eth.getBlockNumber());
   const batchSize = 5000;
@@ -51,19 +51,20 @@ async function parseAVSData(contract, eventName) {
   }
 }
 
-parseAVSData(avsManager, "OperatorAVSRegistrationStatusUpdated")
+connectDB()
   .then(() => {
-    console.log("Finished checking events.");
-    connectDB()
-      .then(() => {
+    parseAVSData(avsManager, "OperatorAVSRegistrationStatusUpdated").then(
+      () => {
+        console.log("Finished checking events.", avsDataMap);
         saveAVSData(avsDataMap);
-      })
-      .catch((error) => {
-        console.error("Failed to connect to MongoDB:", error);
-      });
+      }
+    );
   })
   .catch((err) => {
     console.error("Error checking events:", err);
+  })
+  .catch((error) => {
+    console.error("Failed to connect to MongoDB:", error);
   });
 
 module.exports = { parseAVSData };

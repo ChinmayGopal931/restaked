@@ -1,4 +1,5 @@
-const DelegationManager = require("../../db/OperatorProfile");
+const DelegationManager = require("../../db/DelegationManager");
+const OperatorProfile = require("../../db/OperatorProfile");
 
 /**
  * Function to add or update an AVS entry with new operators.
@@ -13,8 +14,8 @@ async function saveAVSData(avsDataMap) {
       if (operators.length > 0) {
         for (const operator of operators) {
           // Find documents with this operator and update them
-          await DelegationManager.updateMany(
-            { operator: operator }, // Match condition
+          await OperatorProfile.updateMany(
+            { operatorAddress: operator }, // Match condition
             { $addToSet: { avsOptIns: { $each: [avs] } } }
           );
         }

@@ -22,7 +22,6 @@ async function checkEventsAtBlock(contract, eventName) {
       const blockCache = {};
 
       for (const event of events) {
-        console.log(event.event)
         if (!blockCache[event.blockNumber]) {
           blockCache[event.blockNumber] = await web3.eth.getBlock(
             event.blockNumber
@@ -72,6 +71,5 @@ async function checkEventsAtBlock(contract, eventName) {
     await saveToMongoDB(DelegationManager, eventData);
   }
 }
-
 
 module.exports = { checkEventsAtBlock };
