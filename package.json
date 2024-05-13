@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node backend/src/server.js",
     "parseAVSData": "node backend/src/scripts/populateAVSData.js",
+    "parseAvgStakerData": "node backend/src/scripts/populateAverageStakingTime.js",
     "heroku-postbuild": "cd frontend && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

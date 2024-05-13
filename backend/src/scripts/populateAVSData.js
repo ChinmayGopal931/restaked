@@ -4,7 +4,7 @@ const { avsManager } = require("../services/contracts");
 const { saveAVSData } = require("../scripts/mongoose/saveAVSData");
 const connectDB = require("../db/db");
 
-//@DEV TODO: NEED A WAY TO PULL THIS AUTOMATICALLY
+//@DEV TODO: NEED A WAY TO PULL THIS AUTOMATICALLY IN A CHRON JOB
 let avsDataMap = {
   "0x870679e138bcdf293b7ff14dd44b70fc97e12fc0": [],
   "0x71a77037870169d47aad6c2c9360861a4c0df2bf": [],
@@ -51,6 +51,7 @@ async function parseAVSData(contract, eventName) {
   }
 }
 
+async function updateAVSData() {
 connectDB()
   .then(() => {
     parseAVSData(avsManager, "OperatorAVSRegistrationStatusUpdated").then(
@@ -66,8 +67,9 @@ connectDB()
   .catch((error) => {
     console.error("Failed to connect to MongoDB:", error);
   });
+}
 
-module.exports = { parseAVSData };
+module.exports = { parseAVSData, updateAVSData };
 
 /**
  * Adds an operator to the specified AVS entry. If the AVS entry does not exist,

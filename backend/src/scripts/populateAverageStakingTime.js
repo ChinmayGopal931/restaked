@@ -110,21 +110,24 @@ async function checkEventsAtBlock(contract) {
     operatorAvgStakingTimeMap.set(key, avgTime);
   }
 }
+async function populateAverageStakingTime() {
+  connectDB()
+    .then(() => {
+      checkEventsAtBlock(delegationManager)
+        .then(() => {
+          console.log("Finished checking events.");
+          saveAvgStakerData(operatorAvgStakingTimeMap);
+        })
+        .catch((err) => {
+          console.error("Error checking events:", err);
+        });
+    })
+    .catch((error) => {
+      console.error("Failed to connect to MongoDB:", error);
+    });
+}
 
-connectDB()
-  .then(() => {
-    checkEventsAtBlock(delegationManager)
-      .then(() => {
-        console.log("Finished checking events.");
-        saveAvgStakerData(operatorAvgStakingTimeMap);
-      })
-      .catch((err) => {
-        console.error("Error checking events:", err);
-      });
-  })
-  .catch((error) => {
-    console.error("Failed to connect to MongoDB:", error);
-  });
+module.exports = { populateAverageStakingTime};
 
 //HELPER FUNCTIONS
 function calculateAverage(arr) {
